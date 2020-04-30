@@ -1,0 +1,79 @@
+#searchBtn{
+    color: black;
+}
+
+.container
+{
+    font-weight: bold;
+    text-align: center;
+    font-size: 20px;
+    color:white;
+    background-image: url("/img/carrots-food-fresh-freshness-616401.jpg")!important;
+    background-size: 100%;
+    
+}
+
+.jumbotron
+{
+    font-family: "Courier New", Courier, monospace;
+    color:white;
+    font-size: 40px;
+    font-weight: bold;
+    background: rgba(144, 89, 255,0.8);
+}
+
+#images
+{
+    display: flex;
+    justify-content: center;
+    color:black;
+    font-weight: bold;
+    font-size: 40px;
+}
+
+#orientationColor{
+    color:black;
+}
+
+#keyword{
+    color: black;
+}
+
+#results{
+  text-align: justify;
+  text-justify: inter-word;
+  background: rgba(104, 142, 176,0.9);
+  border-radius: 15px 50px 30px 5px;
+
+}
+
+nav{
+    text-align: center;
+    background: rgba(217, 231, 255,0.5);
+}
+
+nav a:hover {/*psuedo class*/
+  border-bottom: 2px orange solid;
+  font-size: 1.6em;
+  transition: .9s; /*transition effect */
+}
+
+
+nav a {   /*links within "nav" container*/
+  padding:15px;
+  padding-bottom:4px;
+  font-size: 1.7em;
+  text-decoration: none;
+  color: black;
+}
+
+#thickHr{
+    border:2px solid;
+    border-color:black;
+    
+}
+
+#searchBtn{
+    color:white;
+    font-weight:bold;
+}

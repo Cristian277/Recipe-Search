@@ -1,0 +1,97 @@
+<%- include ('templates/header'); -%>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/savedRecipes">Saved Recipes</a>
+            <a href="/createAccount">Sign Up</a>
+        </nav>
+        
+        <br>
+
+        <h1 class="jumbotron"> Recipes</h1>
+    	
+        <figure id="results">
+            <img src='<%=foodInfo.hits[0].recipe.image%>' width='200' id="images">
+            <br>
+            <h5>Food Name: <%=foodInfo.hits[0].recipe.label%></h5>
+            <h5>Calories: <%=foodInfo.hits[0].recipe.calories.toFixed(2)%></h5>
+            <h5>Health Label: <%=foodInfo.hits[0].recipe.healthLabels%></h5>
+            
+            <h5>Ingredients: <%=foodInfo.hits[0].recipe.ingredients[0].text + ", " + foodInfo.hits[0].recipe.ingredients[1].text + ", "
+            + foodInfo.hits[0].recipe.ingredients[2].text%></h5>
+            
+            <h5>Diet Label: <%=foodInfo.hits[0].recipe.dietLabels%></h5>
+            <h5>Number of Servings: <%=foodInfo.hits[0].recipe.yield%></h5>
+            <br>
+        </figure>
+    
+        
+        <figure id="results">
+            <img src='<%=foodInfo.hits[1].recipe.image%>' width='200' id="images">
+            <br>
+            <h5>Food Name: <%=foodInfo.hits[1].recipe.label%></h5>
+            <h5>Calories: <%=foodInfo.hits[1].recipe.calories.toFixed(2)%></h5>
+            <h5>Health Label: <%=foodInfo.hits[1].recipe.healthLabels%></h5>
+            
+            <h5>Ingredients: <%=foodInfo.hits[1].recipe.ingredients[0].text + ", " + foodInfo.hits[1].recipe.ingredients[1].text + ", "
+            + foodInfo.hits[1].recipe.ingredients[2].text%></h5>
+            
+            <h5>Diet Label: <%=foodInfo.hits[1].recipe.dietLabels%></h5>
+            <h5>Number of Servings: <%=foodInfo.hits[1].recipe.yield%></h5>
+            <br>
+        </figure>
+        
+        
+        <figure id="results">
+            <img src='<%=foodInfo.hits[2].recipe.image%>' width='200' id="images">
+            <br>
+            <h5>Food Name: <%=foodInfo.hits[2].recipe.label%></h5>
+            <h5>Calories: <%=foodInfo.hits[2].recipe.calories.toFixed(2)%></h5>
+            <h5>Health Label: <%=foodInfo.hits[2].recipe.healthLabels%></h5>
+            
+            <h5>Ingredients: <%=foodInfo.hits[2].recipe.ingredients[0].text + ", " + foodInfo.hits[2].recipe.ingredients[1].text + ", "
+            + foodInfo.hits[2].recipe.ingredients[2].text%></h5>
+            
+            <h5>Diet Label: <%=foodInfo.hits[2].recipe.dietLabels%></h5>
+            <h5>Number of Servings: <%=foodInfo.hits[2].recipe.yield%></h5>
+            <br>
+        </figure>
+        
+        <figure id="results">
+            <img src='<%=foodInfo.hits[3].recipe.image%>' width='200' id="images">
+            <br>
+            <h5>Food Name: <%=foodInfo.hits[3].recipe.label%></h5>
+            <h5>Calories: <%=foodInfo.hits[3].recipe.calories.toFixed(2)%></h5>
+            <h5>Health Label: <%=foodInfo.hits[3].recipe.healthLabels%></h5>
+            
+            <h5>Ingredients: <%=foodInfo.hits[3].recipe.ingredients[0].text + ", " + foodInfo.hits[3].recipe.ingredients[1].text + ", "
+            + foodInfo.hits[3].recipe.ingredients[2].text%></h5>
+            
+            <h5>Diet Label: <%=foodInfo.hits[3].recipe.dietLabels%></h5>
+            <h5>Number of Servings: <%=foodInfo.hits[3].recipe.yield%></h5>
+            <br>
+        </figure>
+        
+        <figure id="results">
+            <img src='<%=foodInfo.hits[4].recipe.image%>' width='200' id="images">
+            <br>
+            <h5>Food Name: <%=foodInfo.hits[4].recipe.label%></h5>
+            <h5>Calories: <%=foodInfo.hits[4].recipe.calories.toFixed(2)%></h5>
+            <h5>Health Label: <%=foodInfo.hits[4].recipe.healthLabels%></h5>
+            
+            <h5>Ingredients: <%=foodInfo.hits[4].recipe.ingredients[0].text + ", " + foodInfo.hits[4].recipe.ingredients[1].text + ", "
+            + foodInfo.hits[4].recipe.ingredients[2].text%></h5>
+            
+            <h5>Diet Label: <%=foodInfo.hits[4].recipe.dietLabels%></h5>
+            <h5>Number of Servings: <%=foodInfo.hits[4].recipe.yield%></h5>
+            <br>
+        </figure>
+        
+        <form action="/" method="GET">
+        <button id="searchBtn" class="btn btn-primary">Search Again</button>
+        </form>
+        <br><br>
+        
+    </body>
+		
+<%- include ('templates/footer'); -%>

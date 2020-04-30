@@ -1,0 +1,25 @@
+<%- include ('templates/header'); -%>
+
+		<nav>
+            <a href="/"><strong>Home</strong></a>
+            <a href="/savedRecipes">Saved Recipes</a>
+            <a href="/register">Sign Up</a>
+        </nav>
+        <hr>
+
+        <h1 class="jumbotron"> Food and Recipe Search </h1>
+    	<hr>
+
+        <form action='/searchResult' method='GET'>
+            
+        Keyword: <input type="text" name="keyword" id="keyword"><br><br>
+       
+        <button id="searchBtn" class="btn btn-primary">Search</button>
+
+        <br>
+            
+        </form>
+             
+    </body>
+		
+<%- include ('templates/footer'); -%>
