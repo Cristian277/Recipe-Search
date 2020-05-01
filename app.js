@@ -26,12 +26,6 @@ const connection = mysql.createConnection({
 
 connection.connect();
 
-/* Middleware to check for signed in user*/
-function isAuthenticated(req, res, next){
-    if(!req.session.authenticated) res.redirect('/login');
-    else next();
-}
-
 //FUNCTION TO CHECK USERNAME AT LOGIN
 function checkUsername(username){
     let stmt = 'SELECT * FROM users WHERE userName=?';
@@ -54,11 +48,23 @@ function checkPassword(password, hash){
     });
 }
 
-//ROUTES
-app.get("/", async function(req,res){
+app.get("/homeSignedIn", async function(req,res){
     
-    res.render("home"); //sends array of parsedData to the home.ejs view
+    res.render("homeSignedIn"); //sends array of parsedData to the home.ejs view
 
+});
+
+function isAuthenticatedHome(req, res, next){
+    if(!req.session.authenticated) res.render('home');
+    else next();
+}
+
+app.get('/home', isAuthenticatedHome, function(req, res){
+   res.redirect('/');
+});
+
+app.get('/', isAuthenticatedHome, function(req, res){
+   res.render('homeSignedIn', {user: req.session.user}); 
 });
 
 //route for register
@@ -163,8 +169,8 @@ app.post('/login', async function(req, res){
     let passwordMatch = await checkPassword(req.body.password, hashedPasswd);
     if(passwordMatch){
         req.session.authenticated = true;
-        req.session.user = isUserExist[0].username;
-        res.redirect('/homeSignedIn');
+        req.session.user = isUserExist[0].userName;
+        res.redirect('/home');
     }
     else{
         res.render('login', {error: true});
@@ -176,9 +182,11 @@ app.get('*', function(req, res){
    res.render('error'); 
 });
 
+/*
 app.get('/homeSignedIn', isAuthenticated, function(req, res){
    res.render('homeSignedIn', {user: req.session.user}); 
 });
+*/
 
 //LISTENER
 app.listen(process.env.PORT,process.env.IP,function(){
