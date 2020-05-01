@@ -16,11 +16,13 @@ DROP TABLE IF EXISTS `recipes`;
 
 CREATE TABLE `recipes` (
   `recipeId` mediumint(9) NOT NULL,
-  `name` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `userId` smallint(6) NULL,
+  `name` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `image` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `calories` int(11) DEFAULT NULL
-  
+  `calories` int(11) DEFAULT NULL,
+  `ingredients` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `numberOfServings` int(11) DEFAULT NULL,
+  `healthLabel` varchar(200) COLLATE utf8_unicode_ci NOT NULL
   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

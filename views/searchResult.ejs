@@ -10,6 +10,8 @@
 
         <h1 class="jumbotron"> Recipes</h1>
     	
+    	<form action='/createRecipe' method='POST'>
+    	    
         <figure id="results">
             <img src='<%=foodInfo.hits[0].recipe.image%>' width='200' id="images">
             <br>
@@ -23,7 +25,10 @@
             <h5>Diet Label: <%=foodInfo.hits[0].recipe.dietLabels%></h5>
             <h5>Number of Servings: <%=foodInfo.hits[0].recipe.yield%></h5>
             <br>
+            <button class='btn btn-primary btn-block'>Save Recipe</button>
         </figure>
+        
+        </form>
     
         
         <figure id="results">

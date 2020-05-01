@@ -35,6 +35,57 @@ app.get('/register', function(req, res){
   res.render('register');
 });
 
+//route for create recipe
+app.get('/createRecipe', function(req, res){
+  res.render('createRecipe');
+});
+
+app.get('/myRecipes', function(req,res){
+    
+    var stmt = 'select name, calories, ingredients,numberOfServings,healthLabel ' +
+               'from recipes' + ';'
+               
+    connection.query(stmt, function(error, results){
+        if(error) throw error;
+        
+        res.render('myRecipes', {recipeInfo : results});  //both name and quotes are passed to quotes view     
+    });
+});
+
+app.post('/createRecipe', function(req,res){
+    
+    connection.query('SELECT COUNT(*) FROM recipes;', function(error,results){
+        
+        if(error) throw error;
+        
+        if(results.length){
+            
+            var recipeId = results[0]['COUNT(*)'] + 1;
+            
+            var stmt = 'INSERT INTO recipes ' + 
+            '(recipeId,name,calories,ingredients,numberOfServings,healthLabel) ' +
+            'VALUES ' +
+            '(' +
+            recipeId + ',"' +
+            req.body.recipeName + '",' +
+            req.body.calories + ',"' +
+            req.body.ingredients + '",' +
+            req.body.numberOfServings + ',"' +
+            req.body.healthLabel + '"' +
+            ');';
+            
+            console.log(stmt);
+            connection.query(stmt, function(error, result) {
+                if(error) throw error;
+                res.redirect('/');
+            });
+            
+        }
+    
+    });
+    
+});
+
 app.get('/login', function(req, res){
     var loginError = false;
     res.render('login', {loginError: loginError});
