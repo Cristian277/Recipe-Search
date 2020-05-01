@@ -3,14 +3,12 @@
 		<nav>
            <a href="/homeSignedIn"><strong>Home</strong></a>
            <a href="/myRecipes">My Recipes</a>
-           <a href="/">Log Out</a>
+           <a href="/logout">Log Out</a>
            <a href="/createRecipe">Create Recipe</a>
         </nav>
         <hr>
-        <h3>Signed in as <%=user%></h3>
         
         <h1 class="jumbotron"> Food and Recipe Search</h1>
-    	<hr>
 
         <form action='/searchResult' method='GET'>
             
@@ -21,6 +19,13 @@
         <br>
             
         </form>
+        
+        <br><br><br><br><br>
+        
+        <div id="usernameDisplay">
+            <h4>Signed in as <%=user%></h4>
+        </div>
+        
              
     </body>
 		

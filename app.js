@@ -81,6 +81,12 @@ app.get('/login', function(req, res){
     res.render('login');
 });
 
+/* Logout Route */
+app.get('/logout', function(req, res){
+   req.session.destroy();
+   res.redirect('/');
+});
+
 //GET RESULTS FROM SEARCH FOR RECIPES
 app.get("/searchResult", async function(req,res){
     
@@ -100,33 +106,67 @@ app.get("/searchResult", async function(req,res){
 });
 
 //ROUTE TO SHOW USERS RECIPES
-app.get('/myRecipes', function(req,res){
+app.get('/myRecipes', isAuthenticatedHome, function(req,res){
     
-    var stmt = 'select name, calories, ingredients,numberOfServings,healthLabel ' +
-               'from recipes' + ';'
+    var username = req.session.user;
+    
+    var statement = 'select userId ' +
+               'from users ' +
+               'where users.userName=\'' 
+                + username + '\';'
+    
+    connection.query(statement,function(error, results){
+        
+        if(error) throw error;
+        
+        var usersId = results[0].userId;
+               
+        var stmt = 'select  name, calories, ingredients,numberOfServings,healthLabel ' +
+               'from recipes ' +
+               'where recipes.userId=\'' 
+                + usersId + '\';'
                
     connection.query(stmt, function(error, results){
+        
         if(error) throw error;
         
         res.render('myRecipes', {recipeInfo : results});  //both name and quotes are passed to quotes view     
     });
 });
 
+});
+
 //ADDING RECIPES TO DATABASE
 app.post('/createRecipe', function(req,res){
     
-    connection.query('SELECT COUNT(*) FROM recipes;', function(error,results){
+    var username = req.session.user;
+    
+    var statement = 'select userId ' +
+               'from users ' +
+               'where users.userName=\'' 
+                + username + '\';'
+    
+    connection.query(statement,function(error, results){
+        
+        if(error) throw error;
+        
+        var usersId = results[0].userId;
+        
+        connection.query('SELECT COUNT(*) FROM recipes', function(error,results){
         
         if(error) throw error;
         
         if(results.length){
             
+            console.log(results);
+            
             var recipeId = results[0]['COUNT(*)'] + 1;
             
             var stmt = 'INSERT INTO recipes ' + 
-            '(recipeId,name,calories,ingredients,numberOfServings,healthLabel) ' +
+            '(userId,recipeId,name,calories,ingredients,numberOfServings,healthLabel) ' +
             'VALUES ' +
             '(' +
+            usersId + ',' +
             recipeId + ',"' +
             req.body.recipeName + '",' +
             req.body.calories + ',"' +
@@ -142,6 +182,8 @@ app.post('/createRecipe', function(req,res){
             });
             
         }
+    });
+        
     });
     
 });
@@ -182,12 +224,6 @@ app.get('*', function(req, res){
    res.render('error'); 
 });
 
-/*
-app.get('/homeSignedIn', isAuthenticated, function(req, res){
-   res.render('homeSignedIn', {user: req.session.user}); 
-});
-*/
-
 //LISTENER
 app.listen(process.env.PORT,process.env.IP,function(){
     console.log("Running Express Server...");
@@ -209,7 +245,7 @@ function getFood(keyword){
         
         resolve(parsedData); 
         
-    }else{
+    } else{
         reject(error); //rejects the promise
         console.log(response.statusCode);
         console.log(error);
@@ -232,10 +268,6 @@ function shuffle(sourceArray) {
     }
     return sourceArray;
 }
-
-
-
-
 
 
 //function to perform ajax call passes in ingr(keyword),app_id,and app_key as a request
