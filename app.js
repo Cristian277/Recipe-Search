@@ -1,17 +1,20 @@
-const express = require("express");
-const app = express();
-const request = require('request');
-var mysql = require('mysql');
-
+var express = require('express');
 var bodyParser = require('body-parser');
-var passport = require('passport');
-var flash = require('express-flash');
+var mysql = require('mysql');
 var session = require('express-session');
-var async = require('async');
+var bcrypt = require('bcrypt');
+var app = express();
+const request = require('request');
 
 app.set("view engine","ejs");
 app.use(express.static("public")); //specify folder for images,css,js
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: true}));
+
+app.use(session({
+    secret: 'top secret code!',
+    resave: true,
+    saveUninitialized: true
+}));
 
 //PERMISSIONS FOR DATABASE ADMIN ACCOUNT
 const connection = mysql.createConnection({
@@ -22,6 +25,34 @@ const connection = mysql.createConnection({
 });
 
 connection.connect();
+
+/* Middleware to check for signed in user*/
+function isAuthenticated(req, res, next){
+    if(!req.session.authenticated) res.redirect('/login');
+    else next();
+}
+
+//FUNCTION TO CHECK USERNAME AT LOGIN
+function checkUsername(username){
+    let stmt = 'SELECT * FROM users WHERE userName=?';
+    return new Promise(function(resolve, reject){
+       connection.query(stmt, [username], function(error, results){
+           if(error) throw error;
+           resolve(results);
+       }); 
+    });
+}
+
+
+//FUNCTION TO CHECK PASSWORD AT LOGIN
+function checkPassword(password, hash){
+    return new Promise(function(resolve, reject){
+       bcrypt.compare(password, hash, function(error, result){
+          if(error) throw error;
+          resolve(result);
+       }); 
+    });
+}
 
 //ROUTES
 app.get("/", async function(req,res){
@@ -40,6 +71,29 @@ app.get('/createRecipe', function(req, res){
   res.render('createRecipe');
 });
 
+app.get('/login', function(req, res){
+    res.render('login');
+});
+
+//GET RESULTS FROM SEARCH FOR RECIPES
+app.get("/searchResult", async function(req,res){
+    
+    let keyword = req.query.keyword;
+    
+    var i = 0, strLength = keyword.length;
+        for(i; i < strLength; i++) {
+        keyword = keyword.replace(" ","%20");
+    }
+    
+    let parsedData = await getFood(keyword); //pass in the keyword to the function could add more search keys
+    
+    parsedData.hits = shuffle(parsedData.hits);
+    
+    res.render("searchResult",{foodInfo:parsedData});
+
+});
+
+//ROUTE TO SHOW USERS RECIPES
 app.get('/myRecipes', function(req,res){
     
     var stmt = 'select name, calories, ingredients,numberOfServings,healthLabel ' +
@@ -52,6 +106,7 @@ app.get('/myRecipes', function(req,res){
     });
 });
 
+//ADDING RECIPES TO DATABASE
 app.post('/createRecipe', function(req,res){
     
     connection.query('SELECT COUNT(*) FROM recipes;', function(error,results){
@@ -81,69 +136,53 @@ app.post('/createRecipe', function(req,res){
             });
             
         }
-    
     });
     
 });
 
-app.get('/login', function(req, res){
-    var loginError = false;
-    res.render('login', {loginError: loginError});
-});
-
 //INSERTING INTO THE TABLE FOR USER
+
 app.post('/register', function(req, res){
-
-  console.log(req.body);
-  
-  connection.query('SELECT COUNT(*) FROM users;', function(error, result){
-      if(error) throw error;
-      if(result.length){
-            var userId = result[0]['COUNT(*)'] + 1;
-            var stmt = 'INSERT INTO users' +
-                      '(userId, userName, password) '+
-                      'VALUES ' +
-                      '(' + 
-                      userId + ',"' +
-                      req.body.username + '","' +
-                      req.body.password + '"' +
-                      ');';
-            console.log(stmt);
-            connection.query(stmt, function(error, result){
-                if(error) throw error;
-                res.redirect('/login');
-            })
-      }
-  });
+    let salt = 10;
+    bcrypt.hash(req.body.password, salt, function(error, hash){
+        if(error) throw error;
+        let stmt = 'INSERT INTO users (userName, password) VALUES (?, ?)';
+        let data = [req.body.username, hash];
+        connection.query(stmt, data, function(error, result){
+           if(error) throw error;
+           console.log(stmt);
+           res.redirect('/login');
+        });
+    });
 });
 
-
-//GET RESULTS FROM SEARCH FOR RECIPES
-app.get("/searchResult", async function(req,res){
+app.post('/login', async function(req, res){
     
-    let keyword = req.query.keyword;
-    
-    var i = 0, strLength = keyword.length;
-        for(i; i < strLength; i++) {
-        keyword = keyword.replace(" ","%20");
+    let isUserExist   = await checkUsername(req.body.username);
+    let hashedPasswd  = isUserExist.length > 0 ? isUserExist[0].password : '';
+    let passwordMatch = await checkPassword(req.body.password, hashedPasswd);
+    if(passwordMatch){
+        req.session.authenticated = true;
+        req.session.user = isUserExist[0].username;
+        res.redirect('/homeSignedIn');
     }
-    
-    let parsedData = await getFood(keyword); //pass in the keyword to the function could add more search keys
-    
-    parsedData.hits = shuffle(parsedData.hits);
-    
-    res.render("searchResult",{foodInfo:parsedData});
-
-});
-
-//LISTENER
-app.listen(process.env.PORT,process.env.IP,function(){
-    console.log("Running Express Server...");
+    else{
+        res.render('login', {error: true});
+    }
 });
 
 //ERROR PAGE
 app.get('*', function(req, res){
    res.render('error'); 
+});
+
+app.get('/homeSignedIn', isAuthenticated, function(req, res){
+   res.render('homeSignedIn', {user: req.session.user}); 
+});
+
+//LISTENER
+app.listen(process.env.PORT,process.env.IP,function(){
+    console.log("Running Express Server...");
 });
 
 //FUNCTION TO RETRIEVE RECIPES FROM API
@@ -187,13 +226,6 @@ function shuffle(sourceArray) {
 }
 
 
-function check_authorized(req, res, next) {
-  if(!req.session.login) {
-    res.redirect("/login");
-    return; 
-  }
-  next();
-}
 
 
 

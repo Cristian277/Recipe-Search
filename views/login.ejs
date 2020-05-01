@@ -1,33 +1,48 @@
 <%- include ('templates/header'); -%>
 
-<div class='container'>
-	<div class='jumbotron'>
-		<h1> Food and Recipes </h1>
-		<form action='/login' method='POST'>
-			<div class='form-group row'>
-				<label for='firstname' class='col-sm-4 col-form-label'>Username</label>
-				<div class='col-sm-4'>
-					<input type='text' class='form-control' id='username' name='username' placeholder='username' required>
-				</div>
+		<nav>
+           <a href="/"><strong>Home</strong></a>
+        </nav>
+        <hr>
+	
+	 <h1 class="jumbotron"> Login </h1>
+	
+    <%if(typeof error != 'undefined' && error){%>
+        <h6 style='color: red;'> Incorrect login credentials! </h6>
+	<%}%>
+	
+	<form action='/login' method='POST'>
+		
+		<div class='form-group row'>
+			<label for='username' class='col-sm-4 col-form-label'>Username</label>
+			<div class='col-sm-4'>
+				<input type='text' class='form-control' id='username' name='username' placeholder='John' required>
 			</div>
-			<div class='form-group row'>
-				<label for='lastname' class='col-sm-4 col-form-label'>Password</label>
-				<div class='col-sm-4'>
-					<input type='password' class='form-control' id='password' name='password' placeholder='password' type='password' required>
-				</div>
+		</div>
+		<div class='form-group row'>
+			<label for='password' class='col-sm-4 col-form-label'>Password</label>
+			<div class='col-sm-4'>
+				<input type='password' class='form-control' id='password' name='password' placeholder='Password123' required>
 			</div>
-			<div class='form-group row'>
-				<div class='col-sm-4'></div>
-				<div class='col-sm-4'>
-					<button class='btn btn-primary btn-block'>Login</button>
-					<%if(loginError){%>
-			            <h1 class='col-sm-12 notfound'>Incorrect Credentials!</h1>
-			        <%}%>
-				</div>
-				<div class='col-sm-4'></div>
+		</div>
+		
+		<div class='form-group row'>
+			<div class='col-sm-4'></div>
+			<div class='col-sm-4'>
+				<button class='btn btn-primary btn-block'>Login</button>
 			</div>
-		</form>
-	</div>
-	<a class='btn btn-primary' href='/register'>New Account</a>
+			<div class='col-sm-4'></div>
+		</div>
+	</form>
+	
+	<form action='/register' method='GET'>
+	<div class='form-group row'>
+			<div class='col-sm-4'></div>
+			<div class='col-sm-4'>
+				<button class='btn btn-primary btn-block'>Create Account</button>
+			</div>
+			<div class='col-sm-4'></div>
+		</div>
+	</form>
+	
 </div>
-<%- include ('templates/footer'); -%>

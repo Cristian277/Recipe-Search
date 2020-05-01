@@ -1,12 +1,14 @@
 <%- include ('templates/header'); -%>
 
 		<nav>
-            <a href="/"><strong>Home</strong></a>
-            <a href="/login">Log In</a>
+           <a href="/homeSignedIn"><strong>Home</strong></a>
+           <a href="/myRecipes">My Recipes</a>
+           <a href="/">Log Out</a>
+           <a href="/createRecipe">Create Recipe</a>
         </nav>
         <hr>
-
-        <h1 class="jumbotron"> Food and Recipe Search </h1>
+        
+        <h1 class="jumbotron"> Food and Recipe Search</h1>
     	<hr>
 
         <form action='/searchResult' method='GET'>
