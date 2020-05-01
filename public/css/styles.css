@@ -77,3 +77,7 @@ nav a {   /*links within "nav" container*/
     color:white;
     font-weight:bold;
 }
+
+#usernameDisplay{
+    font-family:"Courier New", Courier, monospace;
+}
