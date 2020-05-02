@@ -4,12 +4,11 @@
             <a href="/">Home</a>
             <a href="/login">Log In</a>
         </nav>
-        
         <br>
-
         <h1 class="jumbotron"> Recipes</h1>
-    	    
+        
         <figure id="results">
+            
             <img src='<%=foodInfo.hits[0].recipe.image%>' width='200' id="images">
             <br>
             <h5>Food Name: <%=foodInfo.hits[0].recipe.label%></h5>
@@ -43,7 +42,6 @@
             <a href='<%=foodInfo.hits[1].recipe.url%>'>Original Recipe URL</a>
             <br>
         </figure>
-        
         
         <figure id="results">
             <img src='<%=foodInfo.hits[2].recipe.image%>' width='200' id="images">

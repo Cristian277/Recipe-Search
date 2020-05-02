@@ -119,7 +119,9 @@ app.get("/searchSignedIn", isAuthenticatedHome, async function(req,res){
     
     parsedData.hits = shuffle(parsedData.hits);
     
-    res.render("searchSignedIn",{foodInfo:parsedData});
+    var myJSON = JSON.stringify(parsedData);
+    
+    res.render("searchSignedIn",{foodInfo:parsedData,stringInfo:myJSON});
 
 });
 
@@ -139,7 +141,7 @@ app.get('/myRecipes', isAuthenticatedHome, function(req,res){
         
         var usersId = results[0].userId;
                
-        var stmt = 'select  name, calories, ingredients,numberOfServings,healthLabel,image ' +
+        var stmt = 'select name, calories, ingredients,numberOfServings,healthLabel,image ' +
                'from recipes ' +
                'where recipes.userId=\'' 
                 + usersId + '\';'
@@ -152,7 +154,6 @@ app.get('/myRecipes', isAuthenticatedHome, function(req,res){
     });
 });
 });
-
 
 //RETRIEVE RECIPE LIST FOR SIGNED IN USER
 app.get('/recipeList', isAuthenticatedHome, function(req,res){
@@ -321,7 +322,7 @@ function shuffle(sourceArray) {
 function search(){
     
         $.ajax({
-            
+        
         method: "GET",
         url: 'https://api.edamam.com/search',
         dataType: "json",
