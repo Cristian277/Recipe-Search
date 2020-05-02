@@ -37,7 +37,6 @@ function checkUsername(username){
     });
 }
 
-
 //FUNCTION TO CHECK PASSWORD AT LOGIN
 function checkPassword(password, hash){
     return new Promise(function(resolve, reject){
@@ -59,10 +58,12 @@ function isAuthenticatedHome(req, res, next){
     else next();
 }
 
+//AUTHENTICATION FOR HOME
 app.get('/home', isAuthenticatedHome, function(req, res){
    res.redirect('/');
 });
 
+//DEFAULT HOME
 app.get('/', isAuthenticatedHome, function(req, res){
    res.render('homeSignedIn', {user: req.session.user}); 
 });
@@ -71,7 +72,6 @@ app.get('/', isAuthenticatedHome, function(req, res){
 app.get('/register', function(req, res){
   res.render('register');
 });
-
 //route for create recipe
 app.get('/createRecipe', function(req, res){
   res.render('createRecipe');
@@ -105,6 +105,24 @@ app.get("/searchResult", async function(req,res){
 
 });
 
+//GET RESULTS FROM SEARCH FOR RECIPES
+app.get("/searchSignedIn", isAuthenticatedHome, async function(req,res){
+    
+    let keyword = req.query.keyword;
+    
+    var i = 0, strLength = keyword.length;
+        for(i; i < strLength; i++) {
+        keyword = keyword.replace(" ","%20");
+    }
+    
+    let parsedData = await getFood(keyword); //pass in the keyword to the function could add more search keys
+    
+    parsedData.hits = shuffle(parsedData.hits);
+    
+    res.render("searchSignedIn",{foodInfo:parsedData});
+
+});
+
 //ROUTE TO SHOW USERS RECIPES
 app.get('/myRecipes', isAuthenticatedHome, function(req,res){
     
@@ -131,6 +149,32 @@ app.get('/myRecipes', isAuthenticatedHome, function(req,res){
         if(error) throw error;
         
         res.render('myRecipes', {recipeInfo : results});  //both name and quotes are passed to quotes view     
+    });
+});
+});
+
+app.get('/recipeList', isAuthenticatedHome, function(req,res){
+    
+    var username = req.session.user;
+    
+    var statement = 'select userId ' +
+               'from users ' +
+               'where users.userName=\'' 
+                + username + '\';'
+    
+    connection.query(statement,function(error, results){
+        
+        if(error) throw error;
+        
+        var usersId = results[0].userId;
+               
+        var stmt = 'select * from recipes' + ";"
+            
+    connection.query(stmt, function(error, results){
+        
+        if(error) throw error;
+        
+        res.render('recipeList', {recipeInfo : results});  //both name and quotes are passed to quotes view     
     });
 });
 
