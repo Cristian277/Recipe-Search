@@ -153,6 +153,8 @@ app.get('/myRecipes', isAuthenticatedHome, function(req,res){
 });
 });
 
+
+//RETRIEVE RECIPE LIST FOR SIGNED IN USER
 app.get('/recipeList', isAuthenticatedHome, function(req,res){
     
     var username = req.session.user;
@@ -168,17 +170,19 @@ app.get('/recipeList', isAuthenticatedHome, function(req,res){
         
         var usersId = results[0].userId;
                
-        var stmt = 'select * from recipes' + ";"
+        var stmt = 'select * from recipes where recipes.userId=\'' 
+                + 0 + '\';'
             
     connection.query(stmt, function(error, results){
         
         if(error) throw error;
         
-        res.render('recipeList', {recipeInfo : results});  //both name and quotes are passed to quotes view     
+        res.render('recipeList',{recipeInfo : results});  //both name and quotes are passed to quotes view     
     });
 });
 
 });
+
 
 //ADDING RECIPES TO DATABASE
 app.post('/createRecipe', function(req,res){
@@ -224,17 +228,16 @@ app.post('/createRecipe', function(req,res){
                 if(error) throw error;
                 res.redirect('/');
             });
-            
         }
     });
         
     });
-    
 });
-
+    
 //INSERTING INTO THE TABLE FOR USER
 
 app.post('/register', function(req, res){
+    
     let salt = 10;
     bcrypt.hash(req.body.password, salt, function(error, hash){
         if(error) throw error;

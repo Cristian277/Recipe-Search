@@ -13,9 +13,13 @@
     	<hr>
     	
     	<%recipeInfo.forEach(function(recipe){%>
-            
+    	
+    	<form action='/createRecipe/<%=recipeInfo.recipeId%>' method='POST'>
+    	
             <figure id="results">
+                
             <img src='<%=recipe.image%>' width='200' id="images">
+            <h5>Recipe Name: <%=recipe.recipeId%></h5>
             <h5>Recipe Name: <%=recipe.name%></h5>
             <h5>Calories: <%=recipe.calories%></h5>
             <h5>Ingredients: <%=recipe.ingredients%></h5>
@@ -23,9 +27,15 @@
             <h5>Health Label: <%=recipe.healthLabel%></h5>
             
             <br>
+            
+			<button class='btn btn-primary btn-block'>Save Recipe</button>
+            
             </figure>
             
+        </form>
+            
         <%});%>
+        
              
     </body>
 		
