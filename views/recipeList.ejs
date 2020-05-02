@@ -14,8 +14,6 @@
     	
     	<%recipeInfo.forEach(function(recipe){%>
     	
-    	<form action='/createRecipe/<%=recipeInfo.recipeId%>' method='POST'>
-    	
             <figure id="results">
                 
             <img src='<%=recipe.image%>' width='200' id="images">
@@ -31,8 +29,6 @@
 			<button class='btn btn-primary btn-block'>Save Recipe</button>
             
             </figure>
-            
-        </form>
             
         <%});%>
         

@@ -139,7 +139,7 @@ app.get('/myRecipes', isAuthenticatedHome, function(req,res){
         
         var usersId = results[0].userId;
                
-        var stmt = 'select  name, calories, ingredients,numberOfServings,healthLabel ' +
+        var stmt = 'select  name, calories, ingredients,numberOfServings,healthLabel,image ' +
                'from recipes ' +
                'where recipes.userId=\'' 
                 + usersId + '\';'
@@ -180,9 +180,7 @@ app.get('/recipeList', isAuthenticatedHome, function(req,res){
         res.render('recipeList',{recipeInfo : results});  //both name and quotes are passed to quotes view     
     });
 });
-
 });
-
 
 //ADDING RECIPES TO DATABASE
 app.post('/createRecipe', function(req,res){
@@ -211,7 +209,7 @@ app.post('/createRecipe', function(req,res){
             var recipeId = results[0]['COUNT(*)'] + 1;
             
             var stmt = 'INSERT INTO recipes ' + 
-            '(userId,recipeId,name,calories,ingredients,numberOfServings,healthLabel) ' +
+            '(userId,recipeId,name,calories,ingredients,numberOfServings,healthLabel,image) ' +
             'VALUES ' +
             '(' +
             usersId + ',' +
@@ -220,7 +218,8 @@ app.post('/createRecipe', function(req,res){
             req.body.calories + ',"' +
             req.body.ingredients + '",' +
             req.body.numberOfServings + ',"' +
-            req.body.healthLabel + '"' +
+            req.body.healthLabel + '","' +
+            req.body.portrait + '"' +
             ');';
             
             console.log(stmt);
