@@ -136,46 +136,6 @@ app.get('/myRecipes', isAuthenticatedHome, function(req,res){
 });
 });
 
-/*
-//RETRIEVE RECIPE LIST FOR SIGNED IN USER
-app.get('/recipeList', isAuthenticatedHome, function(req,res){
-    
-    var username = req.session.user;
-    
-    var statement = 'select userId ' +
-               'from users ' +
-               'where users.userName=\'' 
-                + username + '\';'
-    
-    connection.query(statement,function(error, results){
-        
-        if(error) throw error;
-        
-        var usersId = results[0].userId;
-               
-        var stmt = 'select * from recipes where recipes.userId=\'' 
-                + 0 + '\';'
-            
-    connection.query(stmt, function(error, results){
-        
-        if(error) throw error;
-        
-        var recipeInfo = results;
-        
-        var statement='select * from ingredients';
-        
-        connection.query(statement,function(error, results) {
-            
-            if(error) throw error;
-            
-            res.render('recipeList', {recipeInfo:recipeInfo, ingredientsInfo:results}); 
-            
-        });
-    });
-});
-});
-*/
-
 app.get('/recipeList', isAuthenticatedHome, function(req,res){
     
     var username = req.session.user;
