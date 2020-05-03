@@ -1,11 +1,8 @@
 <%- include ('templates/header'); -%>
 
-	<div class='jumbotron'>
-		<h3> Recipe Edit </h3>
-		<a class='btn btn-primary' href='/'>Home</a>
-	</div>
+	<br><br>
 	
-	<h3>Edit A Recipe</h3>
+	<h3>Edit Recipe</h3>
 	
 	<form action='/myRecipes/<%=recipe.recipeId%>?_method=PUT' method='POST'>
 	    
@@ -57,8 +54,15 @@
 			
 		<button class='btn btn-primary btn-block'>Update Recipe</button>
 		
-		<br><br>
+		<br>
 		
 	</form>
+	
+	<form action='/' method='GET'>
+		
+		<button class='btn btn-primary btn-block'>Return to Home</button>
+		
+	</form>
+	
 
 <%- include ('templates/footer'); -%>

@@ -9,7 +9,7 @@ var methodOverride = require('method-override');
 
 app.use(methodOverride('_method'));
 app.set("view engine","ejs");
-app.use(express.static("public")); //specify folder for images,css,js
+app.use(express.static('public')); //specify folder for images,css,js
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(session({
@@ -65,6 +65,10 @@ app.get('/logout', function(req, res){
    req.session.destroy();
    res.redirect('/');
 });
+
+app.get('/editRecipe',function(req,res){
+    res.render('editRecipe');
+})
 
 //GET RESULTS FROM SEARCH FOR RECIPES
 app.get("/searchResult", async function(req,res){
@@ -155,7 +159,7 @@ app.get('/recipeList', isAuthenticatedHome, function(req,res){
         
         if(error) throw error;
         
-        res.render('recipeList',{recipeInfo : results});  //both name and quotes are passed to quotes view     
+        res.render('recipeList', {recipeInfo : results});  //both name and quotes are passed to quotes view     
     });
 });
 });
@@ -251,10 +255,77 @@ app.get('/myRecipes/:aid/delete', function(req, res){
     });
 });
 
+//NEW ADD
+app.get('/myRecipes/:aid/add', function(req,res){
+    
+    var username = req.session.user;
+    
+    var statement = 'select userId ' +
+               'from users ' +
+               'where users.userName=\'' 
+                + username + '\';'
+    
+    connection.query(statement,function(error, results){
+        
+        if(error) throw error;
+        
+        var usersId = results[0].userId;
+        
+        connection.query('SELECT COUNT(*) FROM recipes', function(error,results){
+        
+        if(error) throw error;
+        
+        if(results.length){
+            
+            console.log(results);
+            
+            var recipeId = results[0]['COUNT(*)'] + 1;
+            
+            //RETRIEVING RECIPE
+             var statement = 'select * ' +
+               'from recipes ' +
+               'where recipes.recipeId=\'' 
+                + req.params.aid + '\';'
+        
+            connection.query(statement,function(error,results) {
+                
+                var recipe = results[0];
+                
+                var stmt = 'INSERT INTO recipes ' + 
+                '(userId,recipeId,name,calories,ingredients,numberOfServings,healthLabel,image) ' +
+                'VALUES ' +
+                '(' +
+                usersId + ',' +
+                recipeId + ',"' +
+                recipe.name + '",' +
+                recipe.calories + ',"' +
+                recipe.ingredients + '",' +
+                recipe.numberOfServings + ',"' +
+                recipe.healthLabel + '","' +
+                recipe.image + '"' +
+                ');';
+                
+                console.log(stmt);
+                
+                connection.query(stmt, function(error, result) {
+                    
+                if(error) throw error;
+                
+                res.redirect('/');
+            });
+        });
+            
+    }
+});
+});
+});
 
 app.get('/myRecipes/:aid/edit', function(req, res){
+    
     var stmt = 'SELECT * FROM recipes WHERE recipeId=' + req.params.aid + ';';
+    
     connection.query(stmt, function(error, results){
+        
        if(error) throw error;
        if(results.length){
            var recipe = results[0];
@@ -352,7 +423,6 @@ function getFood(keyword){
 });
 
 }
-
 //SHUFFLE THE RESULTS
 function shuffle(sourceArray) {
     for (var i = 0; i < sourceArray.length - 1; i++) {
