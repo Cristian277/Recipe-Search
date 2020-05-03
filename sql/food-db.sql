@@ -70,15 +70,56 @@ INSERT INTO `recipes` (`recipeId`, `userId`, `name`,`image`,`calories`,`ingredie
 (19,NULL,'One-pot chicken chasseur','https://www.bbcgoodfood.com/sites/default/files/styles/recipe/public/recipe_images/recipe-image-legacy-id--337457_12.jpg?itok=BkhdNf4R',400,'1 tsp olive oil, 25g butter, 4 chicken legs, 1 onion, chopped, 2 garlic cloves, crushed, 200g pack small button or chestnut mushrooms, 225ml red wine',4,'Freezable'),
 (20,NULL,'Unbelievably easy mince pies','https://www.bbcgoodfood.com/sites/default/files/styles/recipe/public/user-collections/my-colelction-image/2015/12/recipe-image-legacy-id--901483_10.jpg?itok=sVpBrKkj',300,'225g cold butter, diced, 350g plain flour, 100g golden caster sugar, 280g mincemeat, 1 small egg, icing sugar, to dust',18,'Freezable');
 
+
+
+DROP TABLE IF EXISTS `ingredients`;
+CREATE TABLE `ingredients` (
+	`ingredientId` mediumint(9) NOT NULL,
+	`ingredientName` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+	`recipeId` mediumint(9) NOT NULL
+	
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+INSERT INTO `ingredients` (`ingredientId`, `ingredientName`, `recipeId`) VALUES
+(1,'3/4 to 1 cup (170g to 227g) lukewarm water, 2 tablespoons (28g) butter, at room temperature,1 large egg, 3 1/2 cups (418g) King Arthur Unbleached All-Purpose Flour',1),
+(2,'225g unsalted butter, softened,225g caster sugar,4 eggs,225g self-raising flour,finely grated zest 1 lemon',2),
+(3,'200g dark chocolate,200g butter, cubed, 1 tbsp instant coffee granules',3),
+(4,'1 large onion,1 red pepper, 2 garlic cloves, 1 tbsp oil, 1 heaped tsp hot chilli powder',4),
+(5,'175 light muscovado sugar,175 ml sunflower oil,3 large eggs,lightly beaten, 140g grated carrot(about 3 medium),100g raisins',5),
+(6,'185g unsalted butter, 185g best dark chocolate, 85g plain flour, 40g cocoa powder, 50g white cholocate',6),
+(7,'2 tsp cumin seeds, pinch chilli flakes, 2 tbsp olive oil, 600g carrots, washed and coarsely grated(no need to peel),140g split red lentils',7),
+(8,'1 tbsp olive oil, 2 chicken breasts, chopped, 1 onion, diced, 1 red pepper, thinly sliced, 2 garlic cloves, crushed',8),
+(9,'1 tbsp olive oil, 4 boneless skinless chicken breasts, 200g pack cherry tomatoes',9),
+(10,'2 tbsp sunflower or vegetable oil, 1 onion, chopped, 2 garlic clove, crushed, 700g potatoes, peeled and cut into chunks, 4 carrot, thickly sliced',10),
+(11,'125g ball mozzarella, torn into small pieces, 50g strong cheddar, grated, 1 tbsp wholegrain mustard, 4 skinless boneless chicken breast fillets, 8 smoked streaky bacon rashers',11),
+(12,'350g self-raising flour, plus more for dusting, 1/4 tsp salt, 1 tsp baking powder, 85g butter, cut into cubes',12),
+(13,'2 tsp cumin seeds, large pinch chilli flakes, 1 tbsp olive oil, 1 red onion, chopped, 140g red split lentils',13),
+(14,'400g can chickpea, rinsed and drained, 1 small red onion, rougly chopped, 1 garlic clove, chopped, handful of flat-leaf parsley or curly parsley, 1 tsp ground cumin',14),
+(15,'300g basmati rice, 25g butter, 1 large onion, finely sliced, 1 bay leaf, 3 cardamom pods, small cinnamon stick, 1 tsp turmeric',15),
+(16,'140g ground almond,140g butter, softened, 140g golden caster sugar, 140g self-raising flour, 2 eggs, 1 tsp vanilla extract',16),
+(17,'200g caster sugar, 200g softened butter, 4 eggs, beaten, 200g self-raising flour, 1 tsp baking poweder, 2 tbsp milk',17),
+(18,'9 dried lasagne sheets, 1 tbsp sunflower oil, 1 onion, finely chopped, 700g courgette (about6),coarsely grated, 2 garlic cloves, crushed',18),
+(19,'1 tsp olive oil, 25g butter, 4 chicken legs, 1 onion, chopped, 2 garlic cloves, crushed, 200g pack small button or chestnut mushrooms, 225ml red wine',19),
+(20,'225g cold butter, diced, 350g plain flour, 100g golden caster sugar, 280g mincemeat, 1 small egg, icing sugar, to dust',20);
+
+
 ALTER TABLE `users`
   ADD PRIMARY KEY (`userId`);
   
 ALTER TABLE `recipes`
   ADD PRIMARY KEY (`recipeId`);
+  
+ALTER TABLE `ingredients`
+  ADD PRIMARY KEY (`ingredientId`);
+
 
 ALTER TABLE `users`
-  MODIFY `userId` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `userId` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
   
 ALTER TABLE `recipes`
-  MODIFY `recipeId` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `recipeId` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
+ALTER TABLE `ingredients`
+  MODIFY `ingredientId` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;

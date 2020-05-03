@@ -136,6 +136,7 @@ app.get('/myRecipes', isAuthenticatedHome, function(req,res){
 });
 });
 
+/*
 //RETRIEVE RECIPE LIST FOR SIGNED IN USER
 app.get('/recipeList', isAuthenticatedHome, function(req,res){
     
@@ -159,7 +160,43 @@ app.get('/recipeList', isAuthenticatedHome, function(req,res){
         
         if(error) throw error;
         
-        res.render('recipeList', {recipeInfo : results});  //both name and quotes are passed to quotes view     
+        var recipeInfo = results;
+        
+        var statement='select * from ingredients';
+        
+        connection.query(statement,function(error, results) {
+            
+            if(error) throw error;
+            
+            res.render('recipeList', {recipeInfo:recipeInfo, ingredientsInfo:results}); 
+            
+        });
+    });
+});
+});
+*/
+
+app.get('/recipeList', isAuthenticatedHome, function(req,res){
+    
+    var username = req.session.user;
+    
+    var statement = 'select userId ' +
+               'from users ' +
+               'where users.userName=\''
+                + username + '\';'
+                
+    connection.query(statement,function(error, results){
+        
+        if(error) throw error;
+        
+        var usersId = results[0].userId; //holds userId
+        
+        var stmt = 'SELECT recipes.recipeId,recipes.image, recipes.name, recipes.calories, ingredients.ingredientName, recipes.numberOfServings, '+
+        'recipes.healthLabel FROM recipes, ingredients WHERE recipes.recipeId=ingredients.recipeId AND recipes.userId=\''
+                + 0 + '\';'
+    connection.query(stmt, function(error, results){
+        if(error) throw error;
+        res.render('recipeList',{recipeInfo : results});  //both name and quotes are passed to quotes view
     });
 });
 });
@@ -188,14 +225,13 @@ app.post('/createRecipe', function(req,res){
             
             console.log(results);
             
-            var recipeId = results[0]['COUNT(*)'] + 1;
+            //var recipeId = results[0]['COUNT(*)'] + 1;
             
             var stmt = 'INSERT INTO recipes ' + 
-            '(userId,recipeId,name,calories,ingredients,numberOfServings,healthLabel,image) ' +
+            '(userId,name,calories,ingredients,numberOfServings,healthLabel,image) ' +
             'VALUES ' +
             '(' +
-            usersId + ',' +
-            recipeId + ',"' +
+            usersId + ',"' +
             req.body.recipeName + '",' +
             req.body.calories + ',"' +
             req.body.ingredients + '",' +
@@ -279,7 +315,7 @@ app.get('/myRecipes/:aid/add', function(req,res){
             
             console.log(results);
             
-            var recipeId = results[0]['COUNT(*)'] + 1;
+            //var recipeId = results[0]['COUNT(*)'] + 1;
             
             //RETRIEVING RECIPE
              var statement = 'select * ' +
@@ -292,11 +328,10 @@ app.get('/myRecipes/:aid/add', function(req,res){
                 var recipe = results[0];
                 
                 var stmt = 'INSERT INTO recipes ' + 
-                '(userId,recipeId,name,calories,ingredients,numberOfServings,healthLabel,image) ' +
+                '(userId,name,calories,ingredients,numberOfServings,healthLabel,image) ' +
                 'VALUES ' +
                 '(' +
-                usersId + ',' +
-                recipeId + ',"' +
+                usersId + ',"' +
                 recipe.name + '",' +
                 recipe.calories + ',"' +
                 recipe.ingredients + '",' +
@@ -435,4 +470,3 @@ function shuffle(sourceArray) {
     }
     return sourceArray;
 }
-
