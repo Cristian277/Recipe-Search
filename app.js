@@ -28,37 +28,14 @@ const connection = mysql.createConnection({
 
 connection.connect();
 
-//FUNCTION TO CHECK USERNAME AT LOGIN
-function checkUsername(username){
-    let stmt = 'SELECT * FROM users WHERE userName=?';
-    return new Promise(function(resolve, reject){
-       connection.query(stmt, [username], function(error, results){
-           if(error) throw error;
-           resolve(results);
-       }); 
-    });
-}
-
-//FUNCTION TO CHECK PASSWORD AT LOGIN
-function checkPassword(password, hash){
-    return new Promise(function(resolve, reject){
-       bcrypt.compare(password, hash, function(error, result){
-          if(error) throw error;
-          resolve(result);
-       }); 
-    });
-}
+/////////////////////////////////////////////////
+//VIEWS
 
 app.get("/homeSignedIn", async function(req,res){
     
     res.render("homeSignedIn"); //sends array of parsedData to the home.ejs view
 
 });
-
-function isAuthenticatedHome(req, res, next){
-    if(!req.session.authenticated) res.render('home');
-    else next();
-}
 
 //AUTHENTICATION FOR HOME
 app.get('/home', isAuthenticatedHome, function(req, res){
@@ -154,8 +131,6 @@ app.get('/myRecipes', isAuthenticatedHome, function(req,res){
     });
 });
 });
-
-
 
 //RETRIEVE RECIPE LIST FOR SIGNED IN USER
 app.get('/recipeList', isAuthenticatedHome, function(req,res){
@@ -267,9 +242,43 @@ app.post('/login', async function(req, res){
     }
 });
 
-/* Delete an author record */
+//DELETE A RECIPE FROM USER ACCOUNT 
 app.get('/myRecipes/:aid/delete', function(req, res){
     var stmt = 'DELETE from recipes WHERE recipes.recipeId='+ req.params.aid + ';';
+    connection.query(stmt, function(error, result){
+        if(error) throw error;
+        res.redirect('/');
+    });
+});
+
+
+app.get('/myRecipes/:aid/edit', function(req, res){
+    var stmt = 'SELECT * FROM recipes WHERE recipeId=' + req.params.aid + ';';
+    connection.query(stmt, function(error, results){
+       if(error) throw error;
+       if(results.length){
+           var recipe = results[0];
+          
+           res.render('editRecipe', {recipe:recipe});
+       }
+    });
+});
+
+app.put('/myRecipes/:aid', function(req, res){
+    
+    console.log(req.body);
+    
+    var stmt = 'UPDATE recipes SET ' +
+                'name="'+ req.body.recipeName + '",' +
+                'calories="'+ req.body.calories + '",' +
+                'ingredients="'+ req.body.ingredients + '",' +
+                'numberOfServings="'+ req.body.numberOfServings + '",' +
+                'healthLabel="'+ req.body.healthLabel + '",' +
+                'image="'+ req.body.image + '"' +
+                ' where recipes.recipeId=\'' 
+                + req.params.aid + '\';'
+                
+    console.log(stmt);
     connection.query(stmt, function(error, result){
         if(error) throw error;
         res.redirect('/');
@@ -286,6 +295,36 @@ app.get('*', function(req, res){
 app.listen(process.env.PORT,process.env.IP,function(){
     console.log("Running Express Server...");
 });
+
+
+//////////////////////////////////////////////////
+//FUNCTIONS
+
+function isAuthenticatedHome(req, res, next){
+    if(!req.session.authenticated) res.render('home');
+    else next();
+}
+
+//FUNCTION TO CHECK USERNAME AT LOGIN
+function checkUsername(username){
+    let stmt = 'SELECT * FROM users WHERE userName=?';
+    return new Promise(function(resolve, reject){
+       connection.query(stmt, [username], function(error, results){
+           if(error) throw error;
+           resolve(results);
+       }); 
+    });
+}
+
+//FUNCTION TO CHECK PASSWORD AT LOGIN
+function checkPassword(password, hash){
+    return new Promise(function(resolve, reject){
+       bcrypt.compare(password, hash, function(error, result){
+          if(error) throw error;
+          resolve(result);
+       }); 
+    });
+}
 
 //FUNCTION TO RETRIEVE RECIPES FROM API
 function getFood(keyword){
