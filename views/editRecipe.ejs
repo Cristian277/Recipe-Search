@@ -1,0 +1,70 @@
+<%- include ('templates/header'); -%>
+
+	<div class='jumbotron'>
+		<h3> Recipe Edit </h3>
+		<a class='btn btn-primary' href='/'>Home</a>
+	</div>
+	
+	<h3>Edit A Recipe</h3>
+	
+	<form action='/editRecipe/<%=recipe.recipeId%>?_method=PUT' method='POST'>
+	    
+	    <div class='form-group row'>
+			<label for='authorId' class='col-sm-4 col-form-label'>Recipe ID</label>
+			<div class='col-sm-4'>
+				<input type='text' class='form-control' id='recipeId' name='recipeId' value='<%=recipe.authorId%>' disabled>
+			</div>
+		</div>
+		<div class='form-group row'>
+			<label for='firstname' class='col-sm-4 col-form-label'>Recipe Name</label>
+			<div class='col-sm-4'>
+				<input type='text' class='form-control' id='recipeName' name='recipeName' value='<%=recipe.name%>' required>
+			</div>
+		</div>
+		<div class='form-group row'>
+			<label for='lastname' class='col-sm-4 col-form-label'>Calories</label>
+			<div class='col-sm-4'>
+				<input type='text' class='form-control' id='calories' name='calories' value='<%=recipe.calories%>' required>
+			</div>
+		</div>
+		<div class='form-group row'>
+			<label for='dob' class='col-sm-4 col-form-label'>Ingredients</label>
+			<div class='col-sm-4'>
+				<input type='text' class='form-control' id='ingredients' name='ingredients' value='<%=recipe.ingredients%>' required>
+			</div>
+		</div>
+		<div class='form-group row'>
+			<label for='dod' class='col-sm-4 col-form-label'>Number Of Servings</label>
+			<div class='col-sm-4'>
+				<input type='text' class='form-control' id='numberOfServings' name='numberOfServings' value='<%=recipe.numberOfServings%>'>
+			</div>
+		</div>
+		<div class='form-group row'>
+			<label for='profession' class='col-sm-4 col-form-label'>Health Label</label>
+			<div class='col-sm-4'>
+				<input type='text' class='form-control' id='healthLabel' name='healthLabel' value='<%=recipe.healthLabel%>'>
+			</div>
+		</div>
+		
+		<div class='form-group row'>
+			<label for='portrait' class='col-sm-4 col-form-label'>Image-URL</label>
+			<div class='col-sm-4'>
+				<input type='text' class='form-control' id='image' name='image' value='<%=recipe.image%>'>
+			</div>
+		</div>
+		
+		<div class='form-group row'>
+			<div class='col-sm-4'>
+			    <a class='btn btn-danger btn-block' href='/author/<%=author.authorId%>'>Cancel</a>
+			</div>
+			
+			<div class='col-sm-4'>
+				<button class='btn btn-primary btn-block'>Update Recipe</button>
+			</div>
+			<div class='col-sm-4'></div>
+			
+		</div>
+		
+	</form>
+	
+</div>

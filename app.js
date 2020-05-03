@@ -5,7 +5,9 @@ var session = require('express-session');
 var bcrypt = require('bcrypt');
 var app = express();
 const request = require('request');
+var methodOverride = require('method-override');
 
+app.use(methodOverride('_method'));
 app.set("view engine","ejs");
 app.use(express.static("public")); //specify folder for images,css,js
 app.use(bodyParser.urlencoded({extended: true}));
@@ -119,9 +121,7 @@ app.get("/searchSignedIn", isAuthenticatedHome, async function(req,res){
     
     parsedData.hits = shuffle(parsedData.hits);
     
-    var myJSON = JSON.stringify(parsedData);
-    
-    res.render("searchSignedIn",{foodInfo:parsedData,stringInfo:myJSON});
+    res.render("searchSignedIn",{foodInfo:parsedData});
 
 });
 
@@ -141,7 +141,7 @@ app.get('/myRecipes', isAuthenticatedHome, function(req,res){
         
         var usersId = results[0].userId;
                
-        var stmt = 'select name, calories, ingredients,numberOfServings,healthLabel,image ' +
+        var stmt = 'select recipeId, name, calories, ingredients,numberOfServings,healthLabel,image ' +
                'from recipes ' +
                'where recipes.userId=\'' 
                 + usersId + '\';'
@@ -154,6 +154,8 @@ app.get('/myRecipes', isAuthenticatedHome, function(req,res){
     });
 });
 });
+
+
 
 //RETRIEVE RECIPE LIST FOR SIGNED IN USER
 app.get('/recipeList', isAuthenticatedHome, function(req,res){
@@ -222,7 +224,6 @@ app.post('/createRecipe', function(req,res){
             req.body.healthLabel + '","' +
             req.body.portrait + '"' +
             ');';
-            
             console.log(stmt);
             connection.query(stmt, function(error, result) {
                 if(error) throw error;
@@ -265,6 +266,16 @@ app.post('/login', async function(req, res){
         res.render('login', {error: true});
     }
 });
+
+/* Delete an author record */
+app.get('/myRecipes/:aid/delete', function(req, res){
+    var stmt = 'DELETE from recipes WHERE recipes.recipeId='+ req.params.aid + ';';
+    connection.query(stmt, function(error, result){
+        if(error) throw error;
+        res.redirect('/');
+    });
+});
+
 
 //ERROR PAGE
 app.get('*', function(req, res){
@@ -316,26 +327,3 @@ function shuffle(sourceArray) {
     return sourceArray;
 }
 
-
-//function to perform ajax call passes in ingr(keyword),app_id,and app_key as a request
-/*
-function search(){
-    
-        $.ajax({
-        
-        method: "GET",
-        url: 'https://api.edamam.com/search',
-        dataType: "json",
-        data: { "q":"red%20apple",
-                          "app_id":"af3e5f3d",
-                          "app_key":"2e76f5f797189c1c1d68d4b7416dabd9",
-            },
-                 
-            success: function(result,status) {
-                
-                var foodLabel = result.hints.food.label;
-            
-            }
-        });
-}
-*/
