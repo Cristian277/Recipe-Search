@@ -19,7 +19,7 @@
     color:white;
     font-size: 40px;
     font-weight: bold;
-    background: rgba(144, 89, 255,0.8);
+    background: rgba(18, 125, 219,0.8);
 }
 
 #images
@@ -40,9 +40,9 @@
 }
 
 #results{
-  text-align: justify;
+  text-align: left;
   text-justify: inter-word;
-  background: rgba(104, 142, 176,0.9);
+  background: rgba(0,0,0,0.7);
   border-radius: 15px 50px 30px 5px;
 
 }
@@ -81,3 +81,4 @@ nav a {   /*links within "nav" container*/
 #usernameDisplay{
     font-family:"Courier New", Courier, monospace;
 }
+
