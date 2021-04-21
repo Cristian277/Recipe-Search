@@ -1,6 +1,6 @@
 # CST336 - Final Project
 
-# Description: Web App that uses an API to retrieve recipes and store them into the user's database. 
+# Web App that uses an API to retrieve recipes and store them into the user's database. 
 
 # Contributors:
 
