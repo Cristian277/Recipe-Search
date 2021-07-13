@@ -10,6 +10,6 @@
 - Github Link: https://github.com/Cristian277
 
 ### Victor Cuin
-- Email: 
-- Phone: 
-- Github Link: 
+- Email: vcuin@csumb.edu
+- Phone: (831)-262-7957
+- Github Link: https://github.com/vcuin97
